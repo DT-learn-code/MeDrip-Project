@@ -2,24 +2,32 @@ package org.example.medripbackend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "infusion_sessions")
 @Data
 public class InfusionSession {
     @Id
-    @Column(name = "session_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer sessionId;
 
-    @Column(name = "device_id", length = 50)
-    private String deviceId;
+    @ManyToOne
+    @JoinColumn(name = "record_id", nullable = false)
+    private MedicalRecord medicalRecord;
 
-    @Column(name = "current_rate")
+    @ManyToOne
+    @JoinColumn(name = "device_id", nullable = false)
+    private Device device;
+
+    @ManyToOne
+    @JoinColumn(name = "nurse_id", nullable = false)
+    private User nurse;
+
+    private String fluidType;
+    private Float targetRate;
     private Float currentRate;
-
-    @Column(name = "remaining_volume")
     private Float remainingVolume;
-
-    @Column(name = "session_status", length = 20)
+    private LocalDateTime expectedEndTime;
     private String sessionStatus;
 }
